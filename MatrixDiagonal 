@@ -1,0 +1,35 @@
+import java.util.Scanner;
+
+public class MatrixDiagonal{
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input matrix size
+        System.out.print("Enter the size of the matrix (n): ");
+        int n = scanner.nextInt();
+
+        int[][] matrix = new int[n][n];
+        
+        // Taking matrix input
+        System.out.println("Enter the matrix elements:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = scanner.nextInt();
+            }
+        }
+
+        int mainDiagonalSum = 0, secondaryDiagonalSum = 0;
+
+        // Calculating diagonal sums
+        for (int i = 0; i < n; i++) {
+            mainDiagonalSum += matrix[i][i];                // Main Diagonal
+            secondaryDiagonalSum += matrix[i][n - i - 1];   // Secondary Diagonal
+        }
+
+        // Displaying results
+        System.out.println("Sum of Main Diagonal: " + mainDiagonalSum);
+        System.out.println("Sum of Secondary Diagonal: " + secondaryDiagonalSum);
+
+        scanner.close();
+    }
+}
