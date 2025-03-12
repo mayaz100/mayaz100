@@ -1,0 +1,30 @@
+public class SumOfRowsAndColumns {
+    public static void main(String[] args) {
+        // Initialize a 2D array
+        int[][] numbers = {
+            {3, 8, 1},
+            {14, 7, 9},
+            {2, 6, 11}
+        };
+
+        // Assume the first element as the maximum and minimum
+        int max = numbers[0][0];
+        int min = numbers[0][0];
+
+        // Traverse the 2D array
+        for (int i = 0; i < numbers.length; i++) { // Accessing rows
+            for (int j = 0; j < numbers[i].length; j++) { // Accessing columns
+                if (numbers[i][j] > max) { // Update max if a larger number is found
+                    max = numbers[i][j];
+                }
+                if (numbers[i][j] < min) { // Update min if a smaller number is found
+                    min = numbers[i][j];
+                }
+            }
+        }
+
+        // Print the results
+        System.out.println("Largest Element: " + max);
+        System.out.println("Smallest Element: " + min);
+    }
+}
