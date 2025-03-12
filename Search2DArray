@@ -1,4 +1,4 @@
-public class asma{
+public class Search2DArray{
     public static void main(String[] args) {
         // First matrix (A)
         int[][] A = {
