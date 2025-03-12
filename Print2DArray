@@ -1,0 +1,19 @@
+public class Print২DArray {
+    public static void main(String[] args) {
+        // Defining a 2D Array
+        int[][] array = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+
+        // Using nested loops to print the 2D array
+        System.out.println("The 2D array is:");
+        for (int i = 0; i < array.length; i++) { // Row loop
+            for (int j = 0; j < array[i].length; j++) { // Column loop
+                System.out.print(array[i][j] + " "); // Print the value
+            }
+            System.out.println(); // New line at the end of each row
+        }
+    }
+}
