@@ -1,0 +1,163 @@
+import java.util.*;
+
+class User {
+    String username;
+    String password;
+
+    User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+}
+
+class Product {
+    int id;
+    String name;
+    double price;
+
+    Product(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+}
+
+class CartItem {
+    Product product;
+    int quantity;
+
+    CartItem(Product product, int quantity) {
+        this.product = product;
+        this.quantity = quantity;
+    }
+}
+
+class Order {
+    static int counter = 1;
+    int orderId;
+    List<CartItem> items;
+    double total;
+    String status;
+
+    Order(List<CartItem> items, double total) {
+        this.orderId = counter++;
+        this.items = new ArrayList<>(items);
+        this.total = total;
+        this.status = "Processing";
+    }
+
+    void track() {
+        System.out.println("Order ID: " + orderId + ", Status: " + status);
+    }
+}
+
+public class ECommercePlatform {
+    static Scanner scanner = new Scanner(System.in);
+    static List<User> users = new ArrayList<>();
+    static List<Product> products = new ArrayList<>();
+    static List<CartItem> cart = new ArrayList<>();
+    static List<Order> orders = new ArrayList<>();
+    static User loggedInUser = null;
+
+    public static void main(String[] args) {
+        seedProducts();
+        while (true) {
+            System.out.println("\n1. Register\n2. Login\n3. Exit");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            if (choice == 1) register();
+            else if (choice == 2) login();
+            else break;
+        }
+    }
+
+    static void register() {
+        System.out.print("Enter username: ");
+        String user = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String pass = scanner.nextLine();
+        users.add(new User(user, pass));
+        System.out.println("Registration successful!");
+    }
+
+    static void login() {
+        System.out.print("Username: ");
+        String user = scanner.nextLine();
+        System.out.print("Password: ");
+        String pass = scanner.nextLine();
+        for (User u : users) {
+            if (u.username.equals(user) && u.password.equals(pass)) {
+                loggedInUser = u;
+                System.out.println("Login successful!");
+                userDashboard();
+                return;
+            }
+        }
+        System.out.println("Invalid credentials.");
+    }
+
+    static void userDashboard() {
+        while (true) {
+            System.out.println("\n--- Dashboard ---");
+            System.out.println("1. View Products\n2. View Cart\n3. Checkout\n4. View Orders\n5. Logout");
+            int choice = scanner.nextInt();
+            if (choice == 1) viewProducts();
+            else if (choice == 2) viewCart();
+            else if (choice == 3) checkout();
+            else if (choice == 4) viewOrders();
+            else break;
+        }
+        loggedInUser = null;
+    }
+
+    static void seedProducts() {
+        products.add(new Product(1, "Laptop", 800.0));
+        products.add(new Product(2, "Phone", 500.0));
+        products.add(new Product(3, "Headphones", 100.0));
+    }
+
+    static void viewProducts() {
+        System.out.println("--- Product Catalog ---");
+        for (Product p : products) {
+            System.out.println(p.id + ". " + p.name + " - $" + p.price);
+        }
+        System.out.print("Enter product ID to add to cart (0 to go back): ");
+        int id = scanner.nextInt();
+        if (id == 0) return;
+        Product selected = products.stream().filter(p -> p.id == id).findFirst().orElse(null);
+        if (selected != null) {
+            System.out.print("Enter quantity: ");
+            int qty = scanner.nextInt();
+            cart.add(new CartItem(selected, qty));
+            System.out.println("Added to cart.");
+        } else {
+            System.out.println("Invalid product.");
+        }
+    }
+
+    static void viewCart() {
+        System.out.println("--- Your Cart ---");
+        double total = 0;
+        for (CartItem item : cart) {
+            System.out.println(item.product.name + " x" + item.quantity + " = $" + item.product.price * item.quantity);
+            total += item.product.price * item.quantity;
+        }
+        System.out.println("Total: $" + total);
+    }
+
+    static void checkout() {
+        double total = cart.stream().mapToDouble(item -> item.product.price * item.quantity).sum();
+        System.out.println("Total to pay: $" + total);
+        System.out.println("Processing payment...");
+        System.out.println("Payment successful!");
+        orders.add(new Order(cart, total));
+        cart.clear();
+    }
+
+    static void viewOrders() {
+        System.out.println("--- Your Orders ---");
+        for (Order o : orders) {
+            o.track();
+        }
+    }
+}
